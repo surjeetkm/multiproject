@@ -1,24 +1,26 @@
-node('dind-node') {
-  withMaven(maven:'M3') {
-    stage('Checkout') {
-      git url: 'https://github.com/piomin/sample-spring-microservices-new.git', credentialsId: 'piomin-github', branch: 'master'
-    }
-    stage('Build') {
-      dir('config-service') {
-        sh 'mvn clean install'
-        def pom = readMavenPom file:'pom.xml'
+node{
+	stage("Git clone"){
+		git credentialsId: 'GITHUB_CREDENTIALS', url: 'https://github.com/surjeetkm/multiproject.git'
+	}
+	stage("Maven clean build artifact"){
+		dir('config-service') {
+		def mavenHome= tool name: "Maven", type: "maven"
+		def command= "${mavenHome}/bin/mvn"
+		sh "${command} clean install"
+		def pom = readMavenPom file:'pom.xml'
         print pom.version
         env.version = pom.version
         currentBuild.description = "Release: ${env.version}"
-      }
-    }
-    stage('Image') {
-      dir ('config-service') {
-        docker.withRegistry('https://192.168.99.100:5000') {
-          def app = docker.build "piomin/config-service:${env.version}"
-          app.push()
-        }
-      }
-    }
-  }
+	  }
+	}
+	stage("Run Junit and Integration Test cases"){}
+	stage("Build docker image"){
+		app=docker.build("microservices-2020/servicemesh")
+	}
+	stage("Push Docker image to Container Registry"){
+			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 		app.push("${env.BUILD_NUMBER}")
+ 	 		app.push("latest")
+		}
+	}
 }
