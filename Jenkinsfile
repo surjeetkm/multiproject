@@ -9,51 +9,68 @@ node{
 	}
 	stage("Run Junit and Integration Test cases"){}
 	stages{
-	stage("Build docker image"){
-		
-      dir ('config-service') {
-    		app=docker.build("microservices-2020/config-service:latest")
-    		docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
- 	 		app.push("${env.BUILD_NUMBER}")
- 	 		app.push("latest")
+		stage("Build Config docker image"){
+     	 	dir ('config-service') {
+    			app=docker.build("microservices-2020/config-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        	}
         }
-       dir ('department-service') {
-    		app=docker.build("microservices-2020/department-service:latest")
-    		docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
- 	 		app.push("${env.BUILD_NUMBER}")
- 	 		app.push("latest")
+       }
+       stage("Build department image"){
+       		dir ('department-service') {
+    			app=docker.build("microservices-2020/department-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        	}
         }
-        dir ('employee-service') {
-    		app=docker.build("microservices-2020/employee-service:latest")
-    		docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
- 	 		app.push("${env.BUILD_NUMBER}")
- 	 		app.push("latest")
         }
-        dir ('organization-service') {
-    		app=docker.build("microservices-2020/organization-service:latest")
-    		docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
- 	 		app.push("${env.BUILD_NUMBER}")
- 	 		app.push("latest")
+        stage("employee docker image"){
+        	dir ('employee-service') {
+    			app=docker.build("microservices-2020/employee-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        	}
         }
-        dir ('discovery-service') {
-    		app=docker.build("microservices-2020/discovery-service:latest")
-    		docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
- 	 		app.push("${env.BUILD_NUMBER}")
- 	 		app.push("latest")
         }
-        dir ('proxy-service') {
-    		app=docker.build("microservices-2020/proxy-service:latest")
-    		docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
- 	 		app.push("${env.BUILD_NUMBER}")
- 	 		app.push("latest")
+        stage("Organization docker image"){
+        	dir ('organization-service') {
+    			app=docker.build("microservices-2020/organization-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+        	}
         }
-        dir ('gateway-service') {
+        stage("dicovery image"){
+        	dir ('discovery-service') {
+    			app=docker.build("microservices-2020/discovery-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+           }
+        }
+        stage("Proxy image"){
+        	dir ('proxy-service') {
+    			app=docker.build("microservices-2020/proxy-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+        	}
+        }
+        stage("Gateway service"){
+        	dir ('gateway-service') {
     			app=docker.build("microservices-2020/gateway-service:latest")
     			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
  	 			app.push("${env.BUILD_NUMBER}")
  	 			app.push("latest")
-    	    }
-	    }
-    }
-    }
+    	    	}
+	    	}
+		 }
+      }
 }
