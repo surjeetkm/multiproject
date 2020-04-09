@@ -27,4 +27,52 @@ node{
         		}
         	}
      }
+     stage("employee docker image"){
+         	dir ('employee-service') {
+    			app=docker.build("microservices-2020/employee-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+       	 }
+     }
+      
+      stage("Organization docker image"){
+         	dir ('organization-service') {
+    			app=docker.build("microservices-2020/organization-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+        	}
+        }
+        
+      stage("dicovery image"){
+         	dir ('discovery-service') {
+    			app=docker.build("microservices-2020/discovery-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+           }
+        }
+        stage("Proxy image"){
+         	dir ('proxy-service') {
+    			app=docker.build("microservices-2020/proxy-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+        		}
+        	}
+        }
+        stage("Gateway service"){
+         	dir ('gateway-service') {
+    			app=docker.build("microservices-2020/gateway-service:latest")
+    			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
+ 	 			app.push("${env.BUILD_NUMBER}")
+ 	 			app.push("latest")
+    	    	}
+	    	}
+		 }
+      
 }
