@@ -19,14 +19,12 @@ node{
   	}
   	
   	stage("Build department image"){
-         steps{
        		dir ('department-service') {
     			app=docker.build("microservices-2020/department-service:latest")
     			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
  	 			app.push("${env.BUILD_NUMBER}")
  	 			app.push("latest")
+        		}
         	}
-        }
-        }
-        }
+     }
 }
