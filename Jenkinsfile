@@ -14,5 +14,24 @@ node{
       dir ('config-service') {
     		app=docker.build("microservices-2020/config-service:latest")
         }
+       dir ('department-service') {
+    		app=docker.build("microservices-2020/department-service:latest")
+        }
+        dir ('employee-service') {
+    		app=docker.build("microservices-2020/employee-service:latest")
+        }
+        dir ('organization-service') {
+    		app=docker.build("microservices-2020/organization-service:latest")
+        }
+        dir ('discovery-service') {
+    		app=docker.build("microservices-2020/discovery-service:latest")
+        }
+        dir ('proxy-service') {
+    		app=docker.build("microservices-2020/proxy-service:latest")
+        }
+        dir ('gateway-service') {
+    		app=docker.build("microservices-2020/gateway-service:latest")
+        }
+        
     }
 }
