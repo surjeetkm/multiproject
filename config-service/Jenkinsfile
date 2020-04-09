@@ -7,15 +7,12 @@ node{
 		def mavenHome= tool name: "Maven", type: "maven"
 		def command= "${mavenHome}/bin/mvn"
 		sh "${command} clean install"
-		def pom = readMavenPom file:'pom.xml'
-        print pom.version
-        env.version = pom.version
-        currentBuild.description = "Release: ${env.version}"
+		
 	  }
 	}
 	stage("Run Junit and Integration Test cases"){}
 	stage("Build docker image"){
-		app=docker.build("microservices-2020/servicemesh")
+		app=docker.build("microservices-2020/config-service:latest")
 	}
 	stage("Push Docker image to Container Registry"){
 			docker.withRegistry('https://eu.gcr.io', 'gcr:myregistry') {
